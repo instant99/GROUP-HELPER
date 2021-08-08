@@ -138,14 +138,14 @@ def __user_settings__(user_id):
 
 
 __help__ = """
- - /report <reason>: reply to a message to report it to admins.
- - @admin: reply to a message to report it to admins.
-NOTE: Neither of these will get triggered if used by admins.
+ - /report <причина>: ответьте на сообщение что бы отправить его админам на проверку.
+ - @admin: тоже самое как и /report, только без причины.
+ПРИМЕЧАНИЕ: Возможность репорта дана только пользователям, на адмиов не будет реакции
 
-*Admin only:*
- - /reports <on/off>: change report setting, or view current status.
-   - If done in pm, toggles your status.
-   - If in chat, toggles that chat's status.
+*Только админы:*
+ - /reports <on/off>: сменить настройки репорта, или посмотреть текущий статус.
+   - Если ввести в личку бота - изменить свои настройки.
+   - Если ввести в чат -  изменить настройки чата..
 """
 
 SETTING_HANDLER = CommandHandler("reports", report_setting, pass_args=True)

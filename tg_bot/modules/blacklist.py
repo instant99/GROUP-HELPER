@@ -45,9 +45,9 @@ def blacklist(bot: Bot, update: Update, args: List[str]):
     for text in split_text:
         if text == base_blacklist_string:
             if update_chat_title == message_chat_title:
-                msg.reply_text("There are no blacklisted messages here!")
+                msg.reply_text("Нет запрещенных сообщений здесь!")
             else:
-                msg.reply_text(f"There are no blacklisted messages in <b>{update_chat_title}</b>!",
+                msg.reply_text(f"Нет запрещенных сообщений в <b>{update_chat_title}</b>!",
                                parse_mode=ParseMode.HTML)
             return
         msg.reply_text(text, parse_mode=ParseMode.HTML)
@@ -69,15 +69,15 @@ def add_blacklist(bot: Bot, update: Update):
             sql.add_to_blacklist(chat.id, trigger.lower())
 
         if len(to_blacklist) == 1:
-            msg.reply_text(f"Added <code>{html.escape(to_blacklist[0])}</code> to the blacklist!",
+            msg.reply_text(f"Добавлено <code>{html.escape(to_blacklist[0])}</code> в черный список!",
                            parse_mode=ParseMode.HTML)
 
         else:
-            msg.reply_text(f"Added <code>{len(to_blacklist)}</code> triggers to the blacklist.",
+            msg.reply_text(f"Добавлено <code>{len(to_blacklist)}</code> триггер в черный список.",
                            parse_mode=ParseMode.HTML)
 
     else:
-        msg.reply_text("Tell me which words you would like to remove from the blacklist.")
+        msg.reply_text("Скажите, какие слова вы хотели бы добавить в черный список.")
 
 
 @run_async
@@ -100,23 +100,23 @@ def unblacklist(bot: Bot, update: Update):
 
         if len(to_unblacklist) == 1:
             if successful:
-                msg.reply_text(f"Removed <code>{html.escape(to_unblacklist[0])}</code> from the blacklist!",
+                msg.reply_text(f"Удалено <code>{html.escape(to_unblacklist[0])}</code> from the blacklist!",
                                parse_mode=ParseMode.HTML)
             else:
                 msg.reply_text("This isn't a blacklisted trigger...!")
 
         elif successful == len(to_unblacklist):
-            msg.reply_text(f"Removed <code>{successful}</code> triggers from the blacklist.", parse_mode=ParseMode.HTML)
+            msg.reply_text(f"Удалено <code>{successful}</code> тригерра из черного списка.", parse_mode=ParseMode.HTML)
 
         elif not successful:
             msg.reply_text("None of these triggers exist, so they weren't removed.", parse_mode=ParseMode.HTML)
 
         else:
-            msg.reply_text(f"Removed <code>{successful}</code> triggers from the blacklist."
-                           f" {len(to_unblacklist) - successful} did not exist, so were not removed.",
+            msg.reply_text(f"Удалено <code>{successful}</code> тригерра из черного списка в."
+                           f" {len(to_unblacklist) - successful} из них не существовует, поэтому они не были удалены.",
                            parse_mode=ParseMode.HTML)
     else:
-        msg.reply_text("Tell me which words you would like to remove from the blacklist.")
+        msg.reply_text("Скажите, какие слова вы хотели бы добавить в черный список.")
 
 
 @run_async
@@ -159,19 +159,19 @@ def __stats__():
 
 
 __help__ = """
-Blacklists are used to stop certain triggers from being said in a group. Any time the trigger is mentioned, \
-the message will immediately be deleted. A good combo is sometimes to pair this up with warn filters!
+Черные списки используются, чтобы остановить определенные триггеры в группе. Каждый раз когда триггер будет упоминатся, \
+сообщение будет немедленно удалено. Это хорошо сочетает это с фильтрами предупреждений.
 
-*NOTE:* blacklists do not affect group admins.
+*ПРИМЕЧАНИЕ:* черные списки не влияют на админов группы..
 
- - /blacklist: View the current blacklisted words.
+ - /blacklist: Просмотр текущих тригерров в черных списках.
 
 *Admin only:*
- - /addblacklist <triggers>: Add a trigger to the blacklist. Each line is considered one trigger, so using different \
-lines will allow you to add multiple triggers.
- - /unblacklist <triggers>: Remove triggers from the blacklist. Same newline logic applies here, so you can remove \
-multiple triggers at once.
- - /rmblacklist <triggers>: Same as above.
+ - /addblacklist <triggers>: Добавьте триггер в черный список. Каждая строка считается одним триггером, \
+поэтому использование разных строк позволит вам добавить несколько триггеров.
+ - /unblacklist <triggers>: Удалите триггеры из черного списка. Здесь применяется такая же логика новой строки, вы можете удалить \
+несколько триггеров одновременно.
+ - /rmblacklist <triggers>: То же, что и выше.
 """
 
 BLACKLIST_HANDLER = DisableAbleCommandHandler("blacklist", blacklist, pass_args=True, admin_ok=True)

@@ -116,7 +116,7 @@ def cmd_get(bot: Bot, update: Update, args: List[str]):
     elif len(args) >= 1:
         get(bot, update, args[0], show_none=True)
     else:
-        update.effective_message.reply_text("Get rekt")
+        update.effective_message.reply_text("Нечего давать")
 
 
 @run_async
@@ -226,19 +226,19 @@ def __chat_settings__(chat_id, user_id):
 
 
 __help__ = """
- - /get <notename>: get the note with this notename
- - #<notename>: same as /get
- - /notes or /saved: list all saved notes in this chat
+ - /get <notename>:  получить заметку с этим именем
+ - #<notename>: тоже самое что и /get.
+ - /notes or /saved: показать все заметки в этой группе.
 
-If you would like to retrieve the contents of a note without any formatting, use `/get <notename> noformat`. This can \
-be useful when updating a current note.
+Если вы хотите получить содержимое заметки без какого-либо форматирования, используйте `/get <название заметки> noformat`. Это \
+полезно при обновлении существующей заметки.
 
-*Admin only:*
- - /save <notename> <notedata>: saves notedata as a note with name notename
-A button can be added to a note by using standard markdown link syntax - the link should just be prepended with a \
-`buttonurl:` section, as such: `[somelink](buttonurl:example.com)`. Check /markdownhelp for more info.
- - /save <notename>: save the replied message as a note with name notename
- - /clear <notename>: clear note with this name
+*Только админы:*
+ - /save <notename> <notedata>: Сохранить заметку
+Кнопка может быть добавлена к заметке с помощью стандартного синтаксиса ссылки на разметку - ссылка должна быть просто добавлена с помощью \
+`buttonurl:` section, as such: `[somelink](buttonurl:example.com)`. Напишите /markdownhelp для получения дополнительной информации.
+ - /save <notename>: ответьте на сообщение чтобы сохранить его.
+ - /clear <notename>: Удалить заметку с этим именем.
 """
 
 __mod_name__ = "NOTES"

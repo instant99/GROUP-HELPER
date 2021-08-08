@@ -388,17 +388,17 @@ def __chat_settings__(chat_id, user_id):
 
 
 __help__ = """
- - /warns <userhandle>: get a user's number, and reason, of warns.
- - /warnlist: list of all current warning filters
+ - /warns <userhandle>: получить текущие предупреждения пользователя или себя.
+ - /warnlist: список всех текущих фильтров предупреждения.
 
-*Admins only:*
- - /warn <userhandle>: warn a user. After 3 warns, the user will be banned from the group. Can also be used as a reply.
- - /resetwarn <userhandle>: reset the warns for a user. Can also be used as a reply.
- - /addwarn <keyword> <reply message>: set a warning filter on a certain keyword. If you want your keyword to \
-be a sentence, encompass it with quotes, as such: `/addwarn "very angry" This is an angry user`. 
- - /nowarn <keyword>: stop a warning filter
- - /warnlimit <num>: set the warning limit
- - /strongwarn <on/yes/off/no>: If set to on, exceeding the warn limit will result in a ban. Else, will just punch.
+*Только админы:*
+ - /warn <userhandle>: предупредить пользователя. После 3 предупреждений пользователь будет заблокирован из группы. Можно так же вызвать как ответ.
+ - /resetwarn <userhandle>: сбросить предупреждения пользователя. Можно так же вызвать как ответ
+ - /addwarn <keyword> <reply message>: установить фильтр предупреждения на определенное ключевое слово. Если вы хотите, чтобы ваше ключевое слово \
+было предложением, охватите его кавычками, пример: `/addwarn я сердит 'Это злой пользователь'`. 
+ - /nowarn <keyword>: остановить фильтр предупреждений
+ - /warnlimit <num>: установить лимит предупреждений.
+ - /strongwarn <on/yes/off/no>: если значение включено, превышение предела предупреждения приведет к бану. Если выключено, пользователь будет кикнут..
 """
 
 __mod_name__ = "WARNINGS"

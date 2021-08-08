@@ -47,7 +47,7 @@ def check_flood(bot: Bot, update: Update) -> str:
         return log_message
 
     except BadRequest:
-        msg.reply_text("I can't kick people here, give me permissions first! Until then, I'll disable antiflood.")
+        msg.reply_text("Я не могу кикать людей здесь, сначала дайте мне разрешения! Я отключу antiflood.")
         sql.set_flood(chat.id, 0)
         log_message = ("<b>{chat.title}:</b>\n"
                        "#INFO\n"
@@ -81,13 +81,13 @@ def set_flood(bot: Bot, update: Update, args: List[str]) -> str:
 
         if val == "off" or val == "no" or val == "0":
             sql.set_flood(chat.id, 0)
-            message.reply_text("Antiflood has been disabled{}.".format(chat_name), parse_mode=ParseMode.HTML)
+            message.reply_text("Антифлуд был выключен{}.".format(chat_name), parse_mode=ParseMode.HTML)
 
         elif val.isdigit():
             amount = int(val)
             if amount <= 0:
                 sql.set_flood(chat.id, 0)
-                message.reply_text("Antiflood has been disabled{}.".format(chat_name), parse_mode=ParseMode.HTML)
+                message.reply_text("Антифлуд был выключен{}.".format(chat_name), parse_mode=ParseMode.HTML)
                 log_message = (f"<b>{html.escape(chat.title)}:</b>\n"
                                f"#SETFLOOD\n"
                                f"<b>Admin</b>: {mention_html(user.id, user.first_name)}\n"
@@ -95,12 +95,12 @@ def set_flood(bot: Bot, update: Update, args: List[str]) -> str:
 
                 return log_message
             elif amount < 3:
-                message.reply_text("Antiflood has to be either 0 (disabled), or a number bigger than 3!")
+                message.reply_text("Antiflood должен быть либо 0 (отключен), либо число больше 3 (включен)!")
                 return log_message
 
             else:
                 sql.set_flood(chat.id, amount)
-                message.reply_text("Antiflood has been updated and set to {}{}".format(amount, chat_name),
+                message.reply_text("Антифлуд был установлен на {}{}".format(amount, chat_name),
                                    parse_mode=ParseMode.HTML)
                 log_message = (f"<b>{html.escape(chat.title)}:</b>\n"
                                f"#SETFLOOD\n"
@@ -109,7 +109,7 @@ def set_flood(bot: Bot, update: Update, args: List[str]) -> str:
 
                 return log_message
         else:
-            message.reply_text("Unrecognised argument - please use a number, 'off', or 'no'.")
+            message.reply_text("Неизвестный аргумент - используйте число, 'off', или 'no'.")
 
     return log_message
 
@@ -129,11 +129,11 @@ def flood(bot: Bot, update: Update):
     limit = sql.get_flood_limit(chat.id)
 
     if limit == 0:
-        update.effective_message.reply_text(f"I'm not currently enforcing flood control{chat_name}!",
+        update.effective_message.reply_text(f"В настоящее время я не применяю контроль над флудом{chat_name}!",
                                             parse_mode=ParseMode.HTML)
     else:
-        update.effective_message.reply_text(f"I'm currently muting users if they send "
-                                            f"more than {limit} consecutive messages{chat_name}.",
+        update.effective_message.reply_text(f"В настоящее время я баню пользователей, если они отправляют "
+                                            f"более {limit} последовательных сообщений{chat_name}.",
                                             parse_mode=ParseMode.HTML)
 
 
@@ -150,10 +150,10 @@ def __chat_settings__(chat_id, user_id):
 
 
 __help__ = """
- - /flood: Get the current flood control setting
+ - /flood: Получить текущие настройки антифлуда.
 
 *Admin only:*
- - /setflood <int/'no'/'off'>: enables or disables flood control
+ - /setflood <int/'no'/'off'>: Включить или выключить антифлуд защиту
  Example: /setflood 10
  This will mute users if they send more than 10 messages in a row, bots are ignored.
 """

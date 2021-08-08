@@ -101,13 +101,13 @@ def temp_ban(bot: Bot, update: Update, args: List[str]) -> str:
         member = chat.get_member(user_id)
     except BadRequest as excp:
         if excp.message == "User not found":
-            message.reply_text("I can't seem to find this user.")
+            message.reply_text("Я не могу найти этого пользователя.")
             return log_message
         else:
             raise
 
     if user_id == bot.id:
-        message.reply_text("I'm not gonna BAN myself, are you crazy?")
+        message.reply_text("Я не собираюсь банить себя, ты с ума сошел?")
         return log_message
 
     if is_user_ban_protected(chat, user_id, member):
@@ -142,15 +142,15 @@ def temp_ban(bot: Bot, update: Update, args: List[str]) -> str:
     try:
         chat.kick_member(user_id, until_date=bantime)
         # bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
-        bot.sendMessage(chat.id, f"Banned! User {mention_html(member.user.id, member.user.first_name)} "
-                                 f"will be banned for {time_val}.",
+        bot.sendMessage(chat.id, f"Забанен! Пользователь {mention_html(member.user.id, member.user.first_name)} "
+                                 f"забанен на {time_val}.",
                         parse_mode=ParseMode.HTML)
         return log
 
     except BadRequest as excp:
         if excp.message == "Reply message not found":
             # Do not reply
-            message.reply_text(f"Banned! User will be banned for {time_val}.", quote=False)
+            message.reply_text(f""Забанен! Пользователь забанен на {time_val}.", quote=False)
             return log
         else:
             LOGGER.warning(update)
@@ -183,7 +183,7 @@ def punch(bot: Bot, update: Update, args: List[str]) -> str:
         member = chat.get_member(user_id)
     except BadRequest as excp:
         if excp.message == "User not found":
-            message.reply_text("I can't seem to find this user.")
+            message.reply_text("Я не могу найти этого пользователя.")
             return log_message
         else:
             raise
@@ -193,7 +193,7 @@ def punch(bot: Bot, update: Update, args: List[str]) -> str:
         return log_message
 
     if is_user_ban_protected(chat, user_id):
-        message.reply_text("I really wish I could punch this user....")
+        message.reply_text("Я действительно хотел бы ударить этого пользователя....")
         return log_message
 
     res = chat.unban_member(user_id)  # unban on current user = kick
@@ -254,7 +254,7 @@ def unban(bot: Bot, update: Update, args: List[str]) -> str:
         member = chat.get_member(user_id)
     except BadRequest as excp:
         if excp.message == "User not found":
-            message.reply_text("I can't seem to find this user.")
+            message.reply_text("Я не могу найти этого пользователя.")
             return log_message
         else:
             raise
@@ -304,7 +304,7 @@ def selfunban(bot: Bot, update: Update, args: List[str]) -> str:
         member = chat.get_member(user.id)
     except BadRequest as excp:
         if excp.message == "User not found":
-            message.reply_text("I can't seem to find this user.")
+            message.reply_text("Я не могу найти этого пользователя.")
             return
         else:
             raise
@@ -324,13 +324,13 @@ def selfunban(bot: Bot, update: Update, args: List[str]) -> str:
 
 
 __help__ = """
- - /punchme: punchs the user who issued the command
+ - /punchme: Удаляет пользователя написавшего это из группы
 
-*Admin only:*
- - /ban <userhandle>: bans a user. (via handle, or reply)
- - /tban <userhandle> x(m/h/d): bans a user for x time. (via handle, or reply). m = minutes, h = hours, d = days.
- - /unban <userhandle>: unbans a user. (via handle, or reply)
- - /punch <userhandle>: Punches a user out of the group, (via handle, or reply)
+*Только админы:*
+ - /ban <userhandle>: забанить пользователя. (через ник, или ответ на сообщение)
+ - /tban <userhandle> x(m/h/d): выдать бан на x время. (через ник, или ответ на сообщение). m = minutes, h = hours, d = days.
+ - /unban <userhandle>: разбанить пользователя. (через ник, или ответ на сообщение)
+ - /punch <userhandle>: Удалить пользователя из группы, (через ник, или ответ на сообщение)
 """
 
 BAN_HANDLER = CommandHandler("ban", ban, pass_args=True)

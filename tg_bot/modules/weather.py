@@ -8,12 +8,12 @@ from tg_bot.modules.disable import DisableAbleCommandHandler
 @run_async
 def weather(bot, update, args):
     if len(args) == 0:
-        update.effective_message.reply_text("Write a location to check the weather.")
+        update.effective_message.reply_text("Напишите место чтобы получить его погоду.")
         return
 
     location = " ".join(args)
     if location.lower() == bot.first_name.lower():
-        update.effective_message.reply_text("I will keep an eye on both happy and sad times!")
+        update.effective_message.reply_text("Я буду следить за счастливыми и печальными временами!")
         bot.send_sticker(update.effective_chat.id, BAN_STICKER)
         return
 
@@ -53,11 +53,11 @@ def weather(bot, update, args):
         status += theweather._detailed_status
                         
 
-        update.message.reply_text("Today in {} is being {}, around {}°C.\n".format(thelocation,
+        update.message.reply_text("Сегодня в {} is being {}, примерно {}°C.\n".format(thelocation,
                 status, temperature))
 
     except pyowm.exceptions.not_found_error.NotFoundError:
-        update.effective_message.reply_text("Sorry, location not found.")
+        update.effective_message.reply_text("Простите, местоположение не найдено.")
 
 
 __help__ = """

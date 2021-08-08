@@ -17,14 +17,14 @@ from tg_bot.modules.log_channel import loggable
 
 def check_user(user_id: int, bot: Bot, chat: Chat) -> Optional[str]:
     if not user_id:
-        reply = "You don't seem to be referring to a user."
+        reply = "Кажется, вы не обращаетесь к пользователю."
         return reply
 
     try:
         member = chat.get_member(user_id)
     except BadRequest as excp:
         if excp.message == "User not found":
-            reply = "I can't seem to find this user"
+            reply = "Я не могу найти этого пользователя"
             return reply
         else:
             raise
@@ -91,7 +91,7 @@ def unmute(bot: Bot, update: Update, args: List[str]) -> str:
 
     user_id = extract_user(message, args)
     if not user_id:
-        message.reply_text("You'll need to either give me a username to unmute, or reply to someone to be unmuted.")
+        message.reply_text("Вам нужно либо дать мне имя пользователя, либо ответить на сообщение, чтобы он был размучен.")
         return ""
 
     member = chat.get_member(int(user_id))
@@ -101,7 +101,7 @@ def unmute(bot: Bot, update: Update, args: List[str]) -> str:
                 and member.can_send_media_messages
                 and member.can_send_other_messages
                 and member.can_add_web_page_previews):
-            message.reply_text("This user already has the right to speak.")
+            message.reply_text("Этот пользователь уже имеет право говорить.")
         else:
             bot.restrict_chat_member(chat.id, int(user_id),
                                      can_send_messages=True,
@@ -115,8 +115,7 @@ def unmute(bot: Bot, update: Update, args: List[str]) -> str:
                     f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
                     f"<b>User:</b> {mention_html(member.user.id, member.user.first_name)}")
     else:
-        message.reply_text("This user isn't even in the chat, unmuting them won't make them talk more than they "
-                           "already do!")
+        message.reply_text("Этот пользователь даже не в чате")
 
     return ""
 
@@ -142,7 +141,7 @@ def temp_mute(bot: Bot, update: Update, args: List[str]) -> str:
     member = chat.get_member(user_id)
 
     if not reason:
-        message.reply_text("You haven't specified a time to mute this user for!")
+        message.reply_text("Вы не указали время, чтобы ограничить этого пользователя!")
         return ""
 
     split_reason = reason.split(None, 1)
@@ -184,16 +183,16 @@ def temp_mute(bot: Bot, update: Update, args: List[str]) -> str:
             LOGGER.warning(update)
             LOGGER.exception("ERROR muting user %s in chat %s (%s) due to %s", user_id, chat.title, chat.id,
                              excp.message)
-            message.reply_text("Well damn, I can't mute that user.")
+            message.reply_text("Ну, черт возьми, я не могу ограничить этого пользователя.")
 
     return ""
 
 
 __help__ = """
 *Admin only:*
- - /mute <userhandle>: silences a user. Can also be used as a reply, muting the replied to user.
- - /tmute <userhandle> x(m/h/d): mutes a user for x time. (via handle, or reply). m = minutes, h = hours, d = days.
- - /unmute <userhandle>: unmutes a user. Can also be used as a reply, muting the replied to user.
+ - /mute <userhandle>: замутить пользователя. (через ник или ответ на сообщеник.)
+ - /tmute <userhandle> x(m/h/d): Замутить пользователя на Х время. (Через ник или ответ на сообщеник.) m = минуты, h = часы, d = дни (пример: `60m` или `1h`)..
+ - /unmute <userhandle>: размутить пользователя. (через ник или ответ на сообщеник.).
 """
 
 MUTE_HANDLER = CommandHandler("mute", mute, pass_args=True)

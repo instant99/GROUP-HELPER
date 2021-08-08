@@ -61,8 +61,8 @@ def purge(bot: Bot, update: Update, args: List[str]) -> str:
             msg.delete()
         except BadRequest as err:
             if err.message == "Message can't be deleted":
-                bot.send_message(chat.id, "Cannot delete all messages. The messages may be too old, I might "
-                                          "not have delete rights, or this might not be a supergroup.")
+                bot.send_message(chat.id, "Не удается удалить все сообщения. Сообщения могут быть слишком старыми, или у меня "
+                                          "может не быть прав на удаление, или это может быть не супергруппа.")
 
             elif err.message != "Message to delete not found":
                 LOGGER.exception("Error while purging chat messages.")
@@ -92,17 +92,17 @@ def del_message(bot: Bot, update: Update) -> str:
                     f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
                     f"Message deleted.")
     else:
-        update.effective_message.reply_text("Whadya want to delete?")
+        update.effective_message.reply_text("Что я должен удалить?")
 
     return ""
 
 
 __help__ = """
-*Admin only:*
- - /del: deletes the message you replied to
- - /purge: deletes all messages between this and the replied to message.
- - /purge <integer X>: deletes the replied message, and X messages following it if replied to a message.
- - /purge <integer X>: deletes the number of messages starting from bottom. (Counts manaully deleted messages too)
+*Только админы:*
+ - /del: Удалить сообщение на которое вы ответили.
+ - /purge: Удаляет все сообщения между этим и сообщением на которое вы ответили.
+ - /purge <integer X>: Удаляет сообщение на которое вы ответили и последующие X-сообщенияe.
+ - /purge <integer X>: Удаляет количество сообщений, начинающихся снизу. (Также подсчитывает количество удаляемых сообщений)
 """
 
 DELETE_HANDLER = DisableAbleCommandHandler("del", del_message, filters=Filters.group)

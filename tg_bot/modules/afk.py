@@ -73,7 +73,7 @@ def reply_afk(bot: Bot, update: Update):
                     if not reason:
                         res = "{} is AFK!".format(fst_name)
                     else:
-                        res = "{} is AFK!\nReason:\n{}".format(fst_name, reason)
+                        res = "{} сейчас АФК!\nПотому что:\n{}".format(fst_name, reason)
                     message.reply_text(res)
 
 
@@ -82,9 +82,9 @@ def __gdpr__(user_id):
 
 
 __help__ = """
- - /afk <reason>: mark yourself as AFK(away from keyboard).
- - brb <reason>: same as the afk command - but not a command.
-When marked as AFK, any mentions will be replied to with a message to say you're not available!
+ - /afk <причина>: пометить себя как АФК..
+ - brb <причина>: тоже самое как и /afk - но не комманда.
+Когда вы пометили себя как АФК, на любое упоминаниие вас будет отправлено сообщение о вашей недоступности!
 """
 
 AFK_HANDLER = DisableAbleCommandHandler("afk", afk)

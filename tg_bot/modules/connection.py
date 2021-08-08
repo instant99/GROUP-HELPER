@@ -85,10 +85,10 @@ def connect_chat(bot: Bot, update: Update, args: List[str]):
                     connect_chat = get_chat.id
                     getstatusadmin = bot.get_chat_member(connect_chat, msg.from_user.id)
                 except BadRequest:
-                    send_message(msg, "Invalid Chat ID!")
+                    send_message(msg, "ID чата недействительный!")
                     return
             except BadRequest:
-                send_message(msg, "Invalid Chat ID!")
+                send_message(msg, "ID чата недействительный!")
                 return
 
             isadmin = getstatusadmin.status in ADMIN_STATUS
@@ -275,13 +275,13 @@ def connect_button(bot: Bot, update: Update):
 
 
 __help__ = """
- - /connect: connect a chat (Can be done in a group by /connect or /connect <chat id> in PM)
- - /connection: list connected chats
- - /disconnect: disconnect from a chat
- - /helpconnect: list available commands that can be done remotely
+ - /connect: Подключится к группе (Can be done in a group by /connect or /connect <chat id> in PM)
+ - /connection: список подключенных чатов
+ - /disconnect: Отключится от группы
+ - /helpconnect: список доступных команд, которые можно выполнять удаленно
 
 *Admin only:*
- - /allowconnect <yes/no>: allow a user to connect to a chat
+ - /allowconnect <yes/no>: Разрешить подключение пользователей к этой группе
 """
 
 CONNECT_CHAT_HANDLER = CommandHandler("connect", connect_chat, pass_args=True)

@@ -41,16 +41,16 @@ def promote(bot: Bot, update: Update, args: List[str]) -> str:
 
     user_id = extract_user(message, args)
     if not user_id:
-        message.reply_text(tld(chat.id, "You don't seem to be referring to a user."))
+        message.reply_text(tld(chat.id, "Кажется, вы не обращаетесь к пользователю."))
         return ""
 
     user_member = chatD.get_member(user_id)
     if user_member.status == 'administrator' or user_member.status == 'creator':
-        message.reply_text(tld(chat.id, "How am I meant to promote someone that's already an admin?"))
+        message.reply_text(tld(chat.id, "Как я должен назначить кого-то, кто уже является администратором?"))
         return ""
 
     if user_id == bot.id:
-        message.reply_text(tld(chat.id, "I can't promote myself! Get an admin to do it for me."))
+        message.reply_text(tld(chat.id, "Я не могу назначить себя! Получите администратора, чтобы сделать это для меня."))
         return ""
 
     # set same perms as bot - bot can't assign higher perms than itself!
@@ -66,7 +66,7 @@ def promote(bot: Bot, update: Update, args: List[str]) -> str:
                           can_pin_messages=bot_member.can_pin_messages,
                           can_promote_members=bot_member.can_promote_members)
 
-    message.reply_text(tld(chat.id, f"Successfully promoted {mention_html(user_member.user.id, user_member.user.first_name)} in {html.escape(chatD.title)}!"), parse_mode=ParseMode.HTML)
+    message.reply_text(tld(chat.id, f"Успешно назначен {mention_html(user_member.user.id, user_member.user.first_name)} в {html.escape(chatD.title)}!"), parse_mode=ParseMode.HTML)
     return f"<b>{html.escape(chatD.title)}:</b>" \
             "\n#PROMOTED" \
            f"\n<b>Admin:</b> {mention_html(user.id, user.first_name)}" \
@@ -96,20 +96,20 @@ def demote(bot: Bot, update: Update, args: List[str]) -> str:
 
     user_id = extract_user(message, args)
     if not user_id:
-        message.reply_text(tld(chat.id, "You don't seem to be referring to a user."))
+        message.reply_text(tld(chat.id, "Кажется, вы не обращаетесь к пользователю."))
         return ""
 
     user_member = chatD.get_member(user_id)
     if user_member.status == 'creator':
-        message.reply_text(tld(chat.id, "This person CREATED the chat, how would I demote them?"))
+        message.reply_text(tld(chat.id, "Этот человек СОЗДАЛ чат, как я могу его понизить?"))
         return ""
 
     if not user_member.status == 'administrator':
-        message.reply_text(tld(chat.id, "Can't demote what wasn't promoted!"))
+        message.reply_text(tld(chat.id, "Как я могу понизить того кто не является админом?"))
         return ""
 
     if user_id == bot.id:
-        message.reply_text(tld(chat.id, "I can't demote myself!"))
+        message.reply_text(tld(chat.id, "Я не могу понизить себя!"))
         return ""
 
     try:
@@ -122,7 +122,7 @@ def demote(bot: Bot, update: Update, args: List[str]) -> str:
                               can_restrict_members=False,
                               can_pin_messages=False,
                               can_promote_members=False)
-        message.reply_text(tld(chat.id, f"Successfully demoted in *{chatD.title}*!"), parse_mode=ParseMode.MARKDOWN)
+        message.reply_text(tld(chat.id, f"Успешно понижен в *{chatD.title}*!"), parse_mode=ParseMode.MARKDOWN)
         return f"<b>{html.escape(chatD.title)}:</b>" \
                 "\n#DEMOTED" \
                f"\n<b>Admin:</b> {mention_html(user.id, user.first_name)}" \
@@ -130,7 +130,7 @@ def demote(bot: Bot, update: Update, args: List[str]) -> str:
 
     except BadRequest:
         message.reply_text(
-            tld(chat.id, "Could not demote. I might not be admin, or the admin status was appointed by another user, so I can't act upon them!")
+            tld(chat.id, "Не могу понизить. Возможно, я не администратор, или статус администратора был назначен другим пользователем, поэтому я не могу понизить его!")
             )
         return ""
 
@@ -205,9 +205,9 @@ def invite(bot: Bot, update: Update):
             invitelink = bot.exportChatInviteLink(chat.id)
             update.effective_message.reply_text(invitelink)
         else:
-            update.effective_message.reply_text("I don't have access to the invite link, try changing my permissions!")
+            update.effective_message.reply_text("У меня нет доступа к ссылке приглашения, попробуйте изменить мои права!")
     else:
-        update.effective_message.reply_text("I can only give you invite links for supergroups and channels, sorry!")
+        update.effective_message.reply_text("Я могу дать ссылку для супергрупп и каналов!")
 
 @run_async
 @connection_status
@@ -225,7 +225,7 @@ def set_title(bot: Bot, update: Update, args: List[str]):
         return
 
     if not user_id:
-        message.reply_text("You don't seem to be referring to a user.")
+        message.reply_text("Кажется, вы не обращаетесь к пользователю.")
         return
 
     if user_member.status == 'creator':
@@ -324,7 +324,7 @@ def rmchatpic(bot: Bot, update: Update):
 def adminlist(bot: Bot, update: Update):
     administrators = update.effective_chat.get_administrators()
     msg = update.effective_message
-    text = "Admins in *{}*:".format(update.effective_chat.title or "this chat")
+    text = "Админы в *{}*:".format(update.effective_chat.title or "этом чате")
     for admin in administrators:
         user = admin.user
         status = admin.status
@@ -332,7 +332,7 @@ def adminlist(bot: Bot, update: Update):
         if user.username:
             name = name = escape_markdown("@" + user.username)
         if status == "creator":
-            text += "\n 🔱 Creator:"
+            text += "\n 🔱 Создатель:"
             text += "\n` • `{} \n\n • *Administrators*:".format(name)
     for admin in administrators:
         user = admin.user
@@ -357,14 +357,14 @@ def __chat_settings__(chat_id, user_id):
 
 
 __help__ = """
- - /adminlist: list of admins in the chat
+ - /adminlist: Список админов в чате.
 
 *Admin only:*
- - /pin: silently pins the message replied to - add 'loud' or 'notify' to give notifs to users.
- - /unpin: unpins the currently pinned message
- - /invitelink: gets invitelink
- - /promote: promotes the user replied to
- - /demote: demotes the user replied to
+ - /pin: Безшумно закрепить отвеченое сообщение - добавьте аргумент 'loud' или 'notify' чтобы уведомить пользователей о закреплении.
+ - /unpin: Открепить текущее закрепренное сообщение.
+ - /invitelink: Получить ссылку-приглашение.
+ - /promote: Повысить пользователя.
+ - /demote: Понизить пользователя.
  - /settitle: sets a custom title for an admin that the bot promoted.
  - /settitle: Sets a custom title for an admin which is promoted by bot.
  - /setgpic: As a reply to file or photo to set group profile pic!

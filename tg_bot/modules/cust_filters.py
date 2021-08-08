@@ -32,21 +32,21 @@ def list_handlers(bot: Bot, update: Update):
     if not conn == False:
         chat_id = conn
         chat_name = dispatcher.bot.getChat(conn).title
-        filter_list = "*Filters in {}:*\n"
+        filter_list = "*Фильтры в {}:*\n"
     else:
         chat_id = update.effective_chat.id
         if chat.type == "private":
             chat_name = "local filters"
-            filter_list = "*local filters:*\n"
+            filter_list = "*локальные фильтры:*\n"
         else:
             chat_name = chat.title
-            filter_list = "*Filters in {}*:\n".format(chat_name)
+            filter_list = "*Фильтры в {}*:\n".format(chat_name)
 
 
     all_handlers = sql.get_chat_triggers(chat_id)
 
     if not all_handlers:
-        update.effective_message.reply_text("No filters in *{}*!".format(chat_name), parse_mode=telegram.ParseMode.MARKDOWN)
+        update.effective_message.reply_text("Нет фильтров в *{}*!".format(chat_name), parse_mode=telegram.ParseMode.MARKDOWN)
         return
 
     for keyword in all_handlers:
@@ -103,7 +103,7 @@ def filters(bot: Bot, update: Update):
         content, buttons = button_markdown_parser(extracted[1], entities=msg.parse_entities(), offset=offset)
         content = content.strip()
         if not content:
-            msg.reply_text("There is no note message - You can't JUST have buttons, you need a message to go with it!")
+            msg.reply_text("Вы не можете просто иметь кнопки, вам нужно сообщение для нормальной работы!")
             return
 
     elif msg.reply_to_message and msg.reply_to_message.sticker:
@@ -133,7 +133,7 @@ def filters(bot: Bot, update: Update):
         is_video = True
 
     else:
-        msg.reply_text("You didn't specify what to reply with!")
+        msg.reply_text("Вы не указали на что мне отвечать!")
         return
 
     # Add the filter
@@ -145,7 +145,7 @@ def filters(bot: Bot, update: Update):
     sql.add_filter(chat_id, keyword, content, is_sticker, is_document, is_image, is_audio, is_voice, is_video,
                    buttons)
 
-    msg.reply_text("Handler '{}' added in *{}*!".format(keyword, chat_name), parse_mode=telegram.ParseMode.MARKDOWN)
+    msg.reply_text("Фильтр '{}' добавлен в *{}*!".format(keyword, chat_name), parse_mode=telegram.ParseMode.MARKDOWN)
     raise DispatcherHandlerStop
 
 
@@ -173,16 +173,16 @@ def stop_filter(bot: Bot, update: Update):
     chat_filters = sql.get_chat_triggers(chat_id)
 
     if not chat_filters:
-        update.effective_message.reply_text("No filters are active in *{}*!".format(chat_name), parse_mode=telegram.ParseMode.MARKDOWN)
+        update.effective_message.reply_text("Нет фильтров в *{}*!".format(chat_name), parse_mode=telegram.ParseMode.MARKDOWN)
         return
 
     for keyword in chat_filters:
         if keyword == args[1]:
             sql.remove_filter(chat_id, args[1])
-            update.effective_message.reply_text("Yep, I'll stop replying to that in *{}*.".format(chat_name), parse_mode=telegram.ParseMode.MARKDOWN)
+            update.effective_message.reply_text("Хорошо, я не буду отвечать на это в *{}*.".format(chat_name), parse_mode=telegram.ParseMode.MARKDOWN)
             raise DispatcherHandlerStop
 
-    update.effective_message.reply_text("That's not a current filter - run /filters for all active filters.")
+    update.effective_message.reply_text("Это не текущий фильтр - выполните /filters чтобы увидеть текущие фильтры.")
 
 
 @run_async
@@ -264,14 +264,15 @@ def __chat_settings__(chat_id, user_id):
 
 
 __help__ = """
- - /filters: list all active filters in this chat.
+ - /filters: список всех активных фильтров в этом чате.
 
 *Admin only:*
- - /filter <keyword> <reply message>: add a filter to this chat. The bot will now reply that message whenever 'keyword'\
-is mentioned. If you reply to a sticker with a keyword, the bot will reply with that sticker. NOTE: all filter \
-keywords are in lowercase. If you want your keyword to be a sentence, use quotes. eg: /filter "hey there" How you \
-doin?
- - /stop <filter keyword>: stop that filter.
+ - /filter <keyword> <reply message>: Добавить фильтр в этот чат. Бот будет отвечать на это сообщение всякий раз, когда "ключевое слово" \
+будет упомянуто. 
+ПРИМЕЧАНИЕ: все фильтры не чуствительны к регистру букв.
+Если вы отвечаете стикером с ключевым словом, то ответьте на стикер сообщением `/filter 'ключевое слово'`. 
+Если вы хотите, чтобы ваше ключевое слово было предложением, используйте одинарные кавычки. Например: `/filter 'Привет всем' Как вы?`
+ - /stop <ключевое слово>: Остановить этот фильтр..
 """
 
 __mod_name__ = "FILTERS"

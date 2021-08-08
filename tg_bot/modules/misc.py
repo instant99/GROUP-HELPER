@@ -21,27 +21,24 @@ import tg_bot.modules.sql.users_sql as sql
 
 
 MARKDOWN_HELP = f"""
-Markdown is a very powerful formatting tool supported by telegram. {dispatcher.bot.first_name} has some enhancements, to make sure that \
-saved messages are correctly parsed, and to allow you to create buttons.
+Markdown - очень мощный инструмент для форматирования текста, который поддерживает  Telegram.  {} имеет некоторые улучшения, чтобы убедиться, что 
+сохраненные сообщения правильно написаны , что позволяет создавать кнопки.
 
-- <code>_italic_</code>: wrapping text with '_' will produce italic text
-- <code>*bold*</code>: wrapping text with '*' will produce bold text
-- <code>`code`</code>: wrapping text with '`' will produce monospaced text, also known as 'code'
-- <code>[sometext](someURL)</code>: this will create a link - the message will just show <code>sometext</code>, \
-and tapping on it will open the page at <code>someURL</code>.
-EG: <code>[test](example.com)</code>
+- <code>_италик_</code>: выделение с двух сторон текста с помощью '_' приведет к созданию курсивного текста.
+- <code>*полужирный*</code>: выделение с двух сторон текста с помощью '*' приведет к получению жирного текста.
+- <code>`код`</code>: выделение с двух сторон текста с помощью '`' приведет к получению моноширинного текста, также известного как «код»,
+- <code>[ваш_текст](ваша_ссылка)</code>:  это создаст ссылку - сообщение просто покажет <code> ваш_текст </code>, \
+и нажатие на него откроет страницу в <code>ваша_ссылка</code>.
+Пример: <code>[test](ваша_ссылка)</code>
 
-- <code>[buttontext](buttonurl:someURL)</code>: this is a special enhancement to allow users to have telegram \
-buttons in their markdown. <code>buttontext</code> will be what is displayed on the button, and <code>someurl</code> \
-will be the url which is opened.
-EG: <code>[This is a button](buttonurl:example.com)</code>
+- <code>[Текст кнопки](buttonurl:ваша ссылка)</code>: это специальное расширение, позволяющее пользователям создавать кнопки-ссылки. <code> Текст Кнопки </code> будет отображаться на кнопке, а <code>ваша ссылка</code> \
+будет открывать ваш URL-адрес.
+Пример: <code>[Это кнопка](buttonurl:это_ссылка)</code>
 
-If you want multiple buttons on the same line, use :same, as such:
-<code>[one](buttonurl://example.com)
+Если вам нужно несколько кнопок в одной строке, используйте это:
+<code>[one](buttonurl://ваша_ссылка)
 [two](buttonurl://google.com:same)</code>
-This will create two buttons on a single line, instead of one button per line.
-
-Keep in mind that your message <b>MUST</b> contain some text other than just a button!
+Это создаст две кнопки в одной строке, а не одну кнопку на строку.
 """
 
 
@@ -59,10 +56,10 @@ def get_id(bot: Bot, update: Update, args: List[str]):
             user1 = message.reply_to_message.from_user
             user2 = message.reply_to_message.forward_from
 
-            msg.reply_text(f"The original sender, {html.escape(user2.first_name)},"
-                           f" has an ID of <code>{user2.id}</code>.\n"
-                           f"The forwarder, {html.escape(user1.first_name)},"
-                           f" has an ID of <code>{user1.id}</code>.",
+            msg.reply_text(f"Отправитель, {html.escape(user2.first_name)},"
+                           f" имеет ID <code>{user2.id}</code>.\n"
+                           f"Пересылающий, {html.escape(user1.first_name)},"
+                           f" имеет ID <code>{user1.id}</code>.",
                            parse_mode=ParseMode.HTML)
 
         else:
@@ -74,11 +71,11 @@ def get_id(bot: Bot, update: Update, args: List[str]):
     else:
 
         if chat.type == "private":
-            msg.reply_text(f"Your id is <code>{chat.id}</code>.",
+            msg.reply_text(f"Ваш ID - <code>{chat.id}</code>.",
                            parse_mode=ParseMode.HTML)
 
         else:
-            msg.reply_text(f"This group's id is <code>{chat.id}</code>.",
+            msg.reply_text(f"ID этой группы - <code>{chat.id}</code>.",
                            parse_mode=ParseMode.HTML)
 
 
@@ -107,23 +104,23 @@ def info(bot: Bot, update: Update, args: List[str]):
     elif not message.reply_to_message and (not args or (
             len(args) >= 1 and not args[0].startswith("@") and not args[0].isdigit() and not message.parse_entities(
         [MessageEntity.TEXT_MENTION]))):
-        message.reply_text("I can't extract a user from this.")
+        message.reply_text("Я не могу извлечь ID этого пользователя")
         return
 
     else:
         return
 
-    text = (f"<b>user information:</b>\n"
+    text = (f"<b>Информация о пользователе:</b>\n"
             f"🆔️ID: <code>{user.id}</code>\n"
-            f"👤First Name: {html.escape(user.first_name)}")
+            f"👤Имя: {html.escape(user.first_name)}")
 
     if user.last_name:
-        text += f"\n👤Last Name: {html.escape(user.last_name)}"
+        text += f"\n👤Фамилия: {html.escape(user.last_name)}"
 
     if user.username:
-        text += f"\n👤Username: @{html.escape(user.username)}"
+        text += f"\n👤Ник: @{html.escape(user.username)}"
 
-    text += f"\n👤Permanent user link: {mention_html(user.id, 'link')}"
+    text += f"\n👤Постоянная ссылка на пользователя: {mention_html(user.id, 'link')}"
 
     num_chats = sql.get_user_num_chats(user.id)
     text += f"\n🌍Chat count: <code>{num_chats}</code>"
@@ -195,8 +192,8 @@ def echo(bot: Bot, update: Update):
 @run_async
 def markdown_help(bot: Bot, update: Update):
     update.effective_message.reply_text(MARKDOWN_HELP, parse_mode=ParseMode.HTML)
-    update.effective_message.reply_text("Try forwarding the following message to me, and you'll see!")
-    update.effective_message.reply_text("/save test This is a markdown test. _italics_, *bold*, `code`, "
+    update.effective_message.reply_text("Попробуйте переслать мне следующее сообщение, и вы увидите!")
+    update.effective_message.reply_text("/save test Это тест markdown. _italics_, *bold*, `code`, "
                                         "[URL](example.com) [button](buttonurl:github.com) "
                                         "[button2](buttonurl://google.com:same)")
 
@@ -420,26 +417,26 @@ def twrp(bot, update, args):
 
 
 __help__ = """
- - /id: get the current group id. If used by replying to a message, gets that user's id.
+ - /id: получить ID группы. Если ответить коммандой на сообщение - выдаст ID пользователя.
 
- - /gifid: reply to a gif to me to tell you its file ID.
+ - /gifid: ответьте мне на gif, чтобы сообщить вам идентификатор файла..
 
- - /info: get information about a user.
+ - /info: Получить информацию о пользователе.
 
- - /markdownhelp: quick summary of how markdown works in telegram - can only be called in private chats.
+ - /markdownhelp: Краткое изложение того, как работает markdown в Telegram, - можно вызывать только в личке.
 
- - /safemode <on/off/yes/no>: Disallows new users to send media for 24 hours after joining a group.
-    Use unmute to unrestrict them.
+ - /safemode <on/off/yes/no>: Запрещает новым пользователям отправлять материалы в течение 24 часов после присоединения к группе.
+    Используйте включение, чтобы ограничить их.
 
- - /magisk - gets the latest magisk release for Stable/Beta/Canary
+ - /magisk - Получит последнюю версию магиска для Stable/Beta/Canary.
 
- - /twrp <codename> -  gets latest twrp for the android device using the codename
+ - /twrp <codename> -  получает последнюю версию twrp для устройства Android, используя кодовое имя.
 
- - /checkfw <model> <csc> - Samsung only - shows the latest firmware info for the given device, taken from samsung servers
+ - /checkfw <model> <csc> - Только для Samsung - показывает последнюю информацию о прошивке для данного устройства, полученную с серверов samsung
 
- - /getfw <model> <csc> - Samsung only - gets firmware download links from samfrew, sammobile and sfirmwares for the given device
+ - /getfw <model> <csc> - Только Samsung - получает ссылки на загрузку прошивки от samfrew, sammobile и sfirmwares для данного устройства
 
- - /imdb <movie or TV series name>: View IMDb results for selected movie or TV series 
+ - /imdb <movie or TV series name>: Просмотр результатов IMDb для выбранного фильма или сериала
 """
 
 ID_HANDLER = DisableAbleCommandHandler("id", get_id, pass_args=True)

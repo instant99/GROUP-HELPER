@@ -112,7 +112,7 @@ def lock(bot: Bot, update: Update, args: List[str]) -> str:
         if len(args) >= 1:
             if args[0] in LOCK_TYPES:
                 sql.update_lock(chat.id, args[0], locked=True)
-                message.reply_text("Locked {} messages for all non-admins!".format(args[0]))
+                message.reply_text("Заблокированы {} сообщения для не админов!".format(args[0]))
 
                 return "<b>{}:</b>" \
                        "\n#LOCK" \
@@ -146,10 +146,10 @@ def lock(bot: Bot, update: Update, args: List[str]) -> str:
                                                           mention_html(user.id, user.first_name), args[0])
 
             else:
-                message.reply_text("What are you trying to lock...? Try /locktypes for the list of lockables")
+                message.reply_text("Что вы пытаетесь заблокировать...? Посмотрите /locktypes для списка возможных блокировок")
 
     else:
-        message.reply_text("I'm not an administrator, or haven't got delete rights.")
+        message.reply_text("Я не администратор или я не имею права на удаление сообщений.")
 
     return ""
 
@@ -168,7 +168,7 @@ def unlock(bot: Bot, update: Update, args: List[str]) -> str:
         if len(args) >= 1:
             if args[0] in LOCK_TYPES:
                 sql.update_lock(chat.id, args[0], locked=False)
-                message.reply_text("Unlocked {} for everyone!".format(args[0]))
+                message.reply_text("Разблокированы {} для всех!".format(args[0]))
                 return "<b>{}:</b>" \
                        "\n#UNLOCK" \
                        "\n<b>Admin:</b> {}" \
@@ -202,10 +202,10 @@ def unlock(bot: Bot, update: Update, args: List[str]) -> str:
                        "\nUnlocked <code>{}</code>.".format(html.escape(chat.title),
                                                             mention_html(user.id, user.first_name), args[0])
             else:
-                message.reply_text("What are you trying to unlock...? Try /locktypes for the list of lockables")
+                message.reply_text("Что вы пытаетесь разблокировать...? Посмотрите /locktypes для списка возможных блокировок")
 
         else:
-            bot.sendMessage(chat.id, "What are you trying to unlock...?")
+            bot.sendMessage(chat.id, "Что вы пытаетесь разблокировать...?")
 
     return ""
 
@@ -224,12 +224,12 @@ def del_lockables(bot: Bot, update: Update):
                 for new_mem in new_members:
                     if new_mem.is_bot:
                         if not is_bot_admin(chat, bot.id):
-                            message.reply_text("I see a bot, and I've been told to stop them joining... "
-                                               "but I'm not admin!")
+                            message.reply_text("Я вижу бота, и мне сказали банить их... "
+                                               "Но я не админ!")
                             return
 
                         chat.kick_member(new_mem.id)
-                        message.reply_text("Only admins are allowed to add bots to this chat!.")
+                        message.reply_text("Только админам разрешено добавлять ботов в этот чат! Убирайся отсюда!.")
             else:
                 try:
                     message.delete()
@@ -281,9 +281,9 @@ def build_lock_message(chat_id):
     restr = sql.get_restr(chat_id)
 
     if not (locks or restr):
-        res = "There are no current locks in this chat."
+        res = "Нет текущих блокировок в этом чате."
     else:
-        res = "These are the locks in this chat:\n"
+        res = "Текущие блокировки в этом чате:\n"
         ls = []
         if locks:
             ls += repl([["sticker", "=", locks.sticker], ["audio", "=", locks.audio], ["voice", "=", locks.voice],
@@ -323,18 +323,18 @@ def __chat_settings__(chat_id, user_id):
 
 
 __help__ = """
- - /locktypes: a list of possible locktypes
+ - /locktypes: список возможных типов блокировок
 
 *Admin only:*
- - /lock <type>: lock items of a certain type (not available in private)
- - /unlock <type>: unlock items of a certain type (not available in private)
- - /locks: the current list of locks in this chat.
+ - /lock <type>: заблокировать элемент в этом чате. (не работает в лс)
+ - /unlock <type>: разблокировать элемент в этом чате.(не работает в лс)
+ - /locks: Текущий список блокировок в этом чате.
 
-Locks can be used to restrict a group's users.
-eg:
-Locking urls will auto-delete all messages with urls which haven't been whitelisted, locking stickers will delete all \
-stickers, etc.
-Locking bots will stop non-admins from adding bots to the chat.
+Блокировки можно использовать для ограничения пользователей группы.
+Например:
+Блокировка URL-адресов будет автоматически удалять все сообщения с URL-адресами, которые не были в белом списке, блокировка стикеров будут удалены все \
+стикеры и т.д
+Блокировка ботов остановит не администраторов от добавления ботов в чат.
 """
 
 LOCKTYPES_HANDLER = DisableAbleCommandHandler("locktypes", locktypes)

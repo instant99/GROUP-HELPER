@@ -26,7 +26,7 @@ def stickerid(bot: Bot, update: Update):
                                             escape_markdown(msg.reply_to_message.sticker.file_id) + "```",
                                             parse_mode=ParseMode.MARKDOWN)
     else:
-        update.effective_message.reply_text("Please reply to a sticker to get its ID.")
+        update.effective_message.reply_text("Ответье на стикер чтобы получить его IDD.")
 
 
 @run_async
@@ -40,7 +40,7 @@ def getsticker(bot: Bot, update: Update):
         bot.send_document(chat_id, document=open('sticker.png', 'rb'))
         os.remove("sticker.png")
     else:
-        update.effective_message.reply_text("Please reply to a sticker for me to upload its PNG.")
+        update.effective_message.reply_text("Ответье на стикер чтобы получить его изображение.")
 
 
 @run_async

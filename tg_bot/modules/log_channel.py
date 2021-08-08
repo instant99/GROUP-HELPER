@@ -111,7 +111,7 @@ if is_module_loaded(FILENAME):
         message = update.effective_message
         chat = update.effective_chat
         if chat.type == chat.CHANNEL:
-            message.reply_text("Now, forward the /setlog to the group you want to tie this channel to!")
+            message.reply_text("Теперь перешлите /setlog в группу, с которой вы хотите связать этот канал!")
 
         elif message.forward_from_chat:
             sql.set_chat_log_channel(chat.id, message.forward_from_chat.id)
@@ -125,20 +125,20 @@ if is_module_loaded(FILENAME):
 
             try:
                 bot.send_message(message.forward_from_chat.id,
-                                 f"This channel has been set as the log channel for {chat.title or chat.first_name}.")
+                                 f"Этот канал был установлен как канал логов для {chat.title or chat.first_name}.")
             except Unauthorized as excp:
                 if excp.message == "Forbidden: bot is not a member of the channel chat":
-                    bot.send_message(chat.id, "Successfully set log channel!")
+                    bot.send_message(chat.id, "Успешно установлен канал логов!")
                 else:
-                    LOGGER.exception("ERROR in setting the log channel.")
+                    LOGGER.exception("Ошибка настройки канала логов.")
 
             bot.send_message(chat.id, "Successfully set log channel!")
 
         else:
-            message.reply_text("The steps to set a log channel are:\n"
-                               " - add bot to the desired channel\n"
-                               " - send /setlog to the channel\n"
-                               " - forward the /setlog to the group\n")
+            message.reply_text("Настройка канала для логирования:\n"
+                               " - Добавление бота в канал (Как админа!)\n"
+                               " - Отправка `/setlog` в канал\n"
+                               " - Пересылка отправленного сообщения `/setlog` в группе\n")
 
 
     @run_async
@@ -150,11 +150,11 @@ if is_module_loaded(FILENAME):
 
         log_channel = sql.stop_chat_logging(chat.id)
         if log_channel:
-            bot.send_message(log_channel, f"Channel has been unlinked from {chat.title}")
-            message.reply_text("Log channel has been un-set.")
+            bot.send_message(log_channel, f"Канал отключен от {chat.title}")
+            message.reply_text("Канал с логами был отключен.")
 
         else:
-            message.reply_text("No log channel has been set yet!")
+            message.reply_text("Канал логов еще не установлен!")
 
 
     def __stats__():
@@ -174,14 +174,14 @@ if is_module_loaded(FILENAME):
 
 
     __help__ = """
-*Admin only:*
-- /logchannel: get log channel info
-- /setlog: set the log channel.
-- /unsetlog: unset the log channel.
-Setting the log channel is done by:
-- adding the bot to the desired channel (as an admin!)
-- sending /setlog in the channel
-- forwarding the /setlog to the group
+*Только админы:*
+- /logchannel: Получить информацию о текущем лог канале
+- /setlog: Установить канал для логирования.
+- /unsetlog: Отключить канал для логирования.
+Настройка канала для логирования::
+- Добавление бота в канал (Как админа!)
+- Отправка `/setlog` в канал
+- Пересылка отправленного сообщения `/setlog` в группе
 """
 
     __mod_name__ = "LOG CHANNEL"
