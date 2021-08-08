@@ -142,7 +142,7 @@ def temp_ban(bot: Bot, update: Update, args: List[str]) -> str:
     try:
         chat.kick_member(user_id, until_date=bantime)
         # bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
-        bot.sendMessage(chat.id, f"Banned! Пользователь {mention_html(member.user.id, member.user.first_name)} "
+        bot.sendMessage(chat.id, f"Забанен! Пользователь {mention_html(member.user.id, member.user.first_name)} "
                                  f"забанен на {time_val}.",
                         parse_mode=ParseMode.HTML)
         return log
@@ -150,7 +150,7 @@ def temp_ban(bot: Bot, update: Update, args: List[str]) -> str:
     except BadRequest as excp:
         if excp.message == "Reply message not found":
             # Do not reply
-            message.reply_text(f""Забанен! Пользователь забанен на {time_val}.", quote=False)
+            message.reply_text(f"Забанен! Пользователь забанен на {time_val}.", quote=False)
             return log
         else:
             LOGGER.warning(update)
